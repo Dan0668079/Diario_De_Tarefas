@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, use_key_in_widget_constructors, unused_element
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:math';
 import 'package:teste/components/transaction_form.dart';
 import 'package:teste/components/transaction_list.dart';
@@ -15,6 +16,7 @@ class ExpenseApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.green),
       home: MyHomePage(),
+      
     );
   }
 }
@@ -68,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('Tarefas'),
           actions: [
             IconButton(
-              icon: Icon(Icons.add),
+               icon: FaIcon(FontAwesomeIcons.gamepad), 
               onPressed: () => _opentransactionFormModal(context),
             ),
           ]),
