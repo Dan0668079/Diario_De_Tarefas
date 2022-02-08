@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:teste/controllers/talk_controller.dart';
 import 'package:teste/controllers/user_controller.dart';
+import 'package:teste/src/ui/components/drawer_todo_list_form.dart';
+import 'package:teste/src/ui/pages/login_page.dart';
 import '../../src.dart';
+import 'drawer_edit_todo_list_form.dart';
 
 class ToDoListComponent extends StatefulWidget {
   final List<ToDoListModel> toDoList;
@@ -16,6 +20,7 @@ class ToDoListComponent extends StatefulWidget {
 }
 
 class _ToDoListComponentState extends State<ToDoListComponent> {
+  final tasksList = <ToDoListModel>[];
   late final talkController = Provider.of<TalkController>(
     context,
     listen: false,
@@ -33,7 +38,7 @@ class _ToDoListComponentState extends State<ToDoListComponent> {
     return SizedBox(
       height: 520,
       // child: widget.toDoList.isEmpty
-      child: talkController.tasks.isEmpty
+      child: talkController.tasksList.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,75 +61,71 @@ class _ToDoListComponentState extends State<ToDoListComponent> {
           : SizedBox(
               height: 300,
               child: ListView.builder(
-                itemCount: talkController.tasks.length,
+                itemCount: talkController.tasksList.length,
                 itemBuilder: (ctx, index) {
-                  final tr = talkController.tasks[index];
+                  final tr = talkController.tasksList[index];
 
                   return GestureDetector(
-                    child: Card(
-                      elevation: 10,
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 25,
-                      ),
-                      child: SizedBox(
-                        width: screenWidth * 0.95,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            CircleAvatar(
-                              radius: 23,
-                              child: tr.icone,
-                            ),
-                            SizedBox(
-                              height: screenHeight * 0.08,
-                              child: Column(
+                      child: Card(
+                        elevation: 10,
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 25,
+                        ),
+                        child: SizedBox(
+                          width: screenWidth * 0.95,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                radius: 23,
+                                child: tr.icone,
+                              ),
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    width: screenWidth * 0.7,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          tr.title,
-                                          style: TextStyles.trTitleComponent,
-                                        ),
-                                        Column(
-                                          children: [
-                                            Text(
-                                              DateFormat('dd MMM')
-                                                  .format(tr.date),
-                                              style: TextStyles
-                                                  .dateFormatComponent,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        tr.title,
+                                        style: TextStyles.trTitleComponent,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            DateFormat('dd MMM').format(tr.date),
+                                            style: TextStyles.dateFormatComponent,
+                                          ),
+                                          Text(
+                                            tr.time.format(
+                                              context,
                                             ),
-                                            Text(
-                                              tr.time.format(
-                                                context,
-                                              ),
-                                              style: TextStyles.trTimeComponent,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                            style: TextStyles.trTimeComponent,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ),
-                            IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {}),
-                            IconButton(
-                                icon: const Icon(Icons.edit), onPressed: () {}),
-                          ],
+                              IconButton(icon: const Icon(Icons.delete), onPressed: () async {}),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    onTap: () => alertShowTodo(context, tr),
-                  );
+                      onTap: () {
+                        talkController.selectedModel = tr;
+                        if (talkController.selectedModel != null) {
+                          talkController.titleController.text = talkController.selectedModel!.title;
+                          talkController.descricaoController.text = talkController.selectedModel!.descricao;
+                          int indice = talkController.avatarList.indexOf(talkController.selectedModel!.icone);
+                          talkController.selectIndex = indice;
+                          talkController.selectedIcon = talkController.selectedModel!.icone;
+                        }
+                        globalKey.currentState!.openEndDrawer();
+                      });
                 },
               ),
             ),

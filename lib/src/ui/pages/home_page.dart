@@ -13,9 +13,10 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+final globalKey = GlobalKey<ScaffoldState>();
+
 class _MyHomePageState extends State<MyHomePage> {
-  final List<ToDoListModel> toDoList = [];
-  final globalKey = GlobalKey<ScaffoldState>();
+  // final List<ToDoListModel> toDoList = [];
 
   late final UserController userController = Provider.of<UserController>(
     context,
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: const Color(0xFFFFFFFF),
               child: Column(
                 children: [
-                  ToDoListComponent(talkController.tasks),
+                  ToDoListComponent(talkController.tasksList),
                 ],
               ),
             ),
@@ -67,7 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
           Icons.add,
           color: Colors.white,
         ),
-        onPressed: () => globalKey.currentState!.openEndDrawer(),
+        onPressed: () {
+          talkController.selectedModel = null;
+          globalKey.currentState!.openEndDrawer();
+        },
         backgroundColor: const Color(0xFF00E676),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

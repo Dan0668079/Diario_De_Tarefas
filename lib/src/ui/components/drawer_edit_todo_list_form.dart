@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:teste/controllers/talk_controller.dart';
-import 'package:teste/src/data/data.dart';
+import 'package:teste/src/data/model/to_do_list_model.dart';
 import 'package:teste/src/ui/theme/text_style_widget.dart';
 import 'package:teste/src/ui/widgets/butonn_widget.dart';
 import 'package:intl/intl.dart';
@@ -9,31 +9,20 @@ import 'package:teste/src/ui/widgets/list_avatar_icone_widget.dart';
 import 'package:teste/src/ui/widgets/select_data.dart';
 import 'package:teste/src/ui/widgets/select_time.dart';
 
-class DrawerTodoListForm extends StatefulWidget {
-  const DrawerTodoListForm({Key? key}) : super(key: key);
+class DrawerEditTodoListForm extends StatefulWidget {
+  const DrawerEditTodoListForm({Key? key}) : super(key: key);
 
   @override
-  _DrawerTodoListFormState createState() => _DrawerTodoListFormState();
+  _DrawerEditTodoListForm createState() => _DrawerEditTodoListForm();
 }
 
-class _DrawerTodoListFormState extends State<DrawerTodoListForm> {
-  late TalkController talkController;
-  @override
-  void initState() {
-    talkController = Provider.of<TalkController>(
-      context,
-      listen: false,
-    );
-    // if (widget.todoList != null) {
-    //   talkController.titleController.text = widget.todoList!.title;
-    //   talkController.descricaoController.text = widget.todoList!.descricao;
-    //   int indice = talkController.avatarList.indexOf(widget.todoList!.icone);
-    //   talkController.selecionarIcone(indice);
-    // }
-
-    super.initState();
-  }
-
+class _DrawerEditTodoListForm extends State<DrawerEditTodoListForm> {
+  final tasksList = <ToDoListModel>[];
+  final globalKey = GlobalKey<ScaffoldState>();
+  late final talkController = Provider.of<TalkController>(
+    context,
+    listen: false,
+  );
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -93,8 +82,7 @@ class _DrawerTodoListFormState extends State<DrawerTodoListForm> {
                 children: [
                   TextButton(
                       child: Text(
-                        DateFormat('dd - MMMM - yyyy')
-                            .format(talkController.dateSelect),
+                        DateFormat('dd - MMMM - yyyy').format(talkController.dateSelect),
                         style: TextStyles.textButtonDateHour,
                       ),
                       onPressed: () {
@@ -126,20 +114,6 @@ class _DrawerTodoListFormState extends State<DrawerTodoListForm> {
           ),
           const SizedBox(
             height: 40,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // ButonnWidget(text: 'Adicionar', onpressed: _submitForm),
-              // ButonnWidget(
-              // text: 'Adicionar', onpressed: () => talkController.addTalk()),
-              ButonnWidget(
-                  text: 'Adicionar',
-                  onpressed: () async {
-                    await talkController.addTalk();
-                    Navigator.of(context).pop();
-                  }),
-            ],
           ),
         ],
       ),

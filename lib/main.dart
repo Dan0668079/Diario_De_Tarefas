@@ -8,14 +8,10 @@ import 'package:teste/src/ui/pages/splash_page.dart';
 
 import 'src/src.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    
     MultiProvider(
       providers: [
         ChangeNotifierProvider<TalkController>(create: (_) => TalkController()),

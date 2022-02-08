@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class ToDoListModel {
-  final String id;
-  final CircleAvatar icone;
-  final String title;
-  final String descricao;
-  final DateTime date;
-  final TimeOfDay time;
+  String id;
+  CircleAvatar icone;
+  String title;
+  String descricao;
+  DateTime date;
+  TimeOfDay time;
 
   ToDoListModel({
     required this.id,
@@ -43,6 +43,5 @@ class ToDoListModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ToDoListModel.fromJson(String source) =>
-      ToDoListModel.fromMap(json.decode(source));
+  factory ToDoListModel.fromJson(String source) => ToDoListModel.fromMap(json.decode(source));
 }
